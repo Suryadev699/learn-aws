@@ -78,3 +78,33 @@ aws rds modify-db-instance \
     --db-instance-class db.t3.medium \
     --apply-immediately
 ```
+
+### Step 5: Create a Private RDS Instance for Internal App Development
+
+#### Using the AWS Management Console
+1. Sign in to the AWS Management Console.
+2. Navigate to the RDS service and click on "Create database".
+3. Select the database creation method (Standard Create or Easy Create).
+4. Choose the database engine (e.g., MySQL, PostgreSQL).
+5. Configure the database settings (DB instance identifier, master username, password).
+6. Under "Connectivity", ensure the following:
+    - Select a VPC that is not connected to the internet (no internet gateway).
+    - Choose a private subnet group.
+    - Ensure "Public access" is set to "No".
+7. Configure security groups to allow access only from internal resources (e.g., application servers).
+8. Complete the remaining configurations as needed.
+9. Click "Create database".
+
+#### Using the AWS CLI
+```sh
+aws rds create-db-instance \
+     --db-instance-identifier private-db-instance \
+     --db-instance-class db.t2.micro \
+     --engine mysql \
+     --master-username admin \
+     --master-user-password password \
+     --allocated-storage 20 \
+     --vpc-security-group-ids sg-xxxxxxxx \
+     --db-subnet-group-name private-subnet-group \
+     --no-publicly-accessible
+```
